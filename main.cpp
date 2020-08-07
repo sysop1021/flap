@@ -1,31 +1,30 @@
 #include <SFML/Graphics.hpp>
 
-const int WINDOW_WIDTH  = 1280;
-const int WINDOW_HEIGHT = 720;
-const float BACKGROUND_SCROLL_SPEED = 30.f;
-const float FOREGROUND_SCROLL_SPEED = 60.f;
-const int BACKGROUND_LOOP_POINT = 1032;
+#include "constants.h"
+#include "Bird.h"
 
 int main(void)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird1");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird2");
 
-    sf::Texture backgroundTex, foregroundTex;
-
+    sf::Texture backgroundTex;
     backgroundTex.loadFromFile("assets/background.png");
     sf::Sprite backgroundSprite(backgroundTex);
-    backgroundSprite.setScale(2.5f, 2.5f);
+    backgroundSprite.setScale(SCALING_FACTOR, SCALING_FACTOR);
     float bgScroll = 0.f;
     backgroundSprite.setOrigin(0, 0);
     backgroundSprite.setPosition(0, 0);
 
+    sf::Texture foregroundTex;
     foregroundTex.loadFromFile("assets/ground.png");
     sf::Sprite foregroundSprite(foregroundTex);
-    foregroundSprite.setScale(2.5f, 2.5f);
+    foregroundSprite.setScale(SCALING_FACTOR, SCALING_FACTOR);
     float fgScroll = 0.f;
     foregroundSprite.setOrigin(0, 0);
     float fgYPos = (WINDOW_HEIGHT - foregroundSprite.getGlobalBounds().height);
     foregroundSprite.setPosition(0, fgYPos);
+
+    Bird bird;
 
     sf::Clock clock;
 
@@ -45,13 +44,14 @@ int main(void)
         /* Handle Input */
 
         /* Update */
-        backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0); // TODO: bug: this jump is SUUUUUPER noticeable
+        backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
         foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
 
         /* Draw */
         window.clear();
         window.draw(backgroundSprite);
         window.draw(foregroundSprite);
+        bird.render(window);
         window.display();
     }
 
