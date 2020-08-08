@@ -5,7 +5,7 @@
 
 int main(void)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird2");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird3");
 
     sf::Texture backgroundTex;
     backgroundTex.loadFromFile("assets/background.png");
@@ -46,6 +46,8 @@ int main(void)
         /* Update */
         backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
         foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
+
+        bird.update(dt.asSeconds());
 
         /* Draw */
         window.clear();

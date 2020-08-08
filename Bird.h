@@ -10,10 +10,11 @@ public:
     ~Bird();
 
     void render(sf::RenderWindow& window);
+    void update(float dt);
 
     sf::Texture tex;
     sf::Sprite sprite;
-    float xPos, yPos, width, height;
+    float xPos, yPos, yVel, width, height;
 
 private:
 
