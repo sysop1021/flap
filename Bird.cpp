@@ -27,9 +27,9 @@ void Bird::update(float dt)
 {
     yVel += GRAVITY * dt;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && yVel >= 0.f)
     {
-        // TODO: BUG: player can hold space and jetpack off into infinity
+        // TODO: BUG: better, but this allows for auto jumping
         yVel = -JUMP_FORCE;
     }
 
