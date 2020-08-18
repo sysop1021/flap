@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <deque>
 
 #include "constants.h"
 #include "Bird.h"
@@ -7,7 +8,7 @@
 
 int main(void)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird4");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird5");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
     srand(time(0));
@@ -33,14 +34,8 @@ int main(void)
 
     FPSCounter fpsCounter;
 
-   /* Pipe pipes[5];
-    for (int  i = 0; i < 5; i++)
-    {
-        pipes[i] = new Pipe;
-    }
+    std::deque <Pipe> pipes;
     float pipeTimer = 0.f;
-    */
-    Pipe pipe;
 
     sf::Clock clock;
 
@@ -69,13 +64,36 @@ int main(void)
         backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
         foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
 
-        pipe.update(dt.asSeconds());
+        pipeTimer += dt.asSeconds();
+
+        if (pipeTimer > 2.f)
+        {
+            pipes.push_back(*new Pipe());
+            pipeTimer = 0;
+        }
+
+        for (int i = 0; i < pipes.size(); i++)
+        {
+            pipes[i].update(dt.asSeconds());
+
+        }
+
+        if (pipes.size() > 5)
+        {
+            pipes.pop_front();
+        }
+
         bird.update(dt.asSeconds());
 
         /* Draw */
         window.clear();
         window.draw(backgroundSprite);
-        pipe.render(window);
+
+        for (int i = 0; i < pipes.size(); i++)
+        {
+            pipes[i].render(window);
+        }
+
         window.draw(foregroundSprite);
         bird.render(window);
         fpsCounter.render(dt, window);
