@@ -7,7 +7,7 @@
 int main(void)
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird4");
-    // window.setFramerateLimit(60); // TODO: MB: this messes up my timestep...?
+    window.setFramerateLimit(60);
 
     sf::Texture backgroundTex;
     backgroundTex.loadFromFile("assets/background.png");

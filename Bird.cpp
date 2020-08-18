@@ -28,7 +28,7 @@ void Bird::update(float dt)
 {
     yVel += GRAVITY * dt;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && yVel >= 0.f && isReleased)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isReleased)
     {
         yVel = -JUMP_FORCE;
         isReleased = false;
