@@ -32,7 +32,7 @@ void FPSCounter::render(sf::Time dt, sf::RenderWindow& window)
 
     if (smoothTimer > 500.f)
     {
-        fpsCtr.setString("FPS: " + std::to_string(fps));
+        fpsCtr.setString("FPS:" + std::to_string(fps));
         smoothTimer = 0.f;
     }
 }

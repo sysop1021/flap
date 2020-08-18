@@ -2,12 +2,15 @@
 
 #include "constants.h"
 #include "Bird.h"
+#include "Pipe.h"
 #include "FPSCounter.h"
 
 int main(void)
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird4");
     window.setFramerateLimit(60);
+    window.setVerticalSyncEnabled(true);
+    srand(time(0));
 
     sf::Texture backgroundTex;
     backgroundTex.loadFromFile("assets/background.png");
@@ -29,6 +32,15 @@ int main(void)
     Bird bird;
 
     FPSCounter fpsCounter;
+
+   /* Pipe pipes[5];
+    for (int  i = 0; i < 5; i++)
+    {
+        pipes[i] = new Pipe;
+    }
+    float pipeTimer = 0.f;
+    */
+    Pipe pipe;
 
     sf::Clock clock;
 
@@ -57,11 +69,13 @@ int main(void)
         backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
         foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
 
+        pipe.update(dt.asSeconds());
         bird.update(dt.asSeconds());
 
         /* Draw */
         window.clear();
         window.draw(backgroundSprite);
+        pipe.render(window);
         window.draw(foregroundSprite);
         bird.render(window);
         fpsCounter.render(dt, window);
