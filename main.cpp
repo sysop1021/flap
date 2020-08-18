@@ -2,10 +2,12 @@
 
 #include "constants.h"
 #include "Bird.h"
+#include "FPSCounter.h"
 
 int main(void)
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird4");
+    // window.setFramerateLimit(60); // TODO: MB: this messes up my timestep...?
 
     sf::Texture backgroundTex;
     backgroundTex.loadFromFile("assets/background.png");
@@ -26,6 +28,8 @@ int main(void)
 
     Bird bird;
 
+    FPSCounter fpsCounter;
+
     sf::Clock clock;
 
     /* Game Loop */
@@ -39,9 +43,15 @@ int main(void)
             {
                 window.close();
             }
+
+            if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F11))
+            {
+                fpsCounter.showCtr = !fpsCounter.showCtr;
+            }
         }
 
         /* Handle Input */
+        // punting to update
 
         /* Update */
         backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
@@ -54,6 +64,7 @@ int main(void)
         window.draw(backgroundSprite);
         window.draw(foregroundSprite);
         bird.render(window);
+        fpsCounter.render(dt, window);
         window.display();
     }
 

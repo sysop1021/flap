@@ -11,6 +11,7 @@ Bird::Bird()
     yPos = WINDOW_HEIGHT / 2 - sprite.getGlobalBounds().height / 2;
     sprite.setPosition(xPos, yPos);
     yVel = 0.f;
+    isReleased = true;
 }
 
 Bird::~Bird()
@@ -27,10 +28,15 @@ void Bird::update(float dt)
 {
     yVel += GRAVITY * dt;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && yVel >= 0.f)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && yVel >= 0.f && isReleased)
     {
-        // TODO: BUG: better, but this allows for auto jumping
         yVel = -JUMP_FORCE;
+        isReleased = false;
+    }
+
+    if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)))
+    {
+        isReleased = true;
     }
 
     yPos += yVel;

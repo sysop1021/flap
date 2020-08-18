@@ -15,6 +15,7 @@ public:
     sf::Texture tex;
     sf::Sprite sprite;
     float xPos, yPos, yVel, width, height;
+    bool isReleased;
 
 private:
 
