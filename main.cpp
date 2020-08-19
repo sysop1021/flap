@@ -14,7 +14,7 @@ int main(void)
     srand(time(0));
 
     sf::Texture backgroundTex;
-    backgroundTex.loadFromFile("assets/background.png");
+    backgroundTex.loadFromFile("assets/background - Copy.png");
     sf::Sprite backgroundSprite(backgroundTex);
     backgroundSprite.setScale(SCALING_FACTOR, SCALING_FACTOR);
     float bgScroll = 0.f;
@@ -68,6 +68,7 @@ int main(void)
 
         if (pipeTimer > 2.f)
         {
+            // TODO: MB: need to reconsider this - memory leak prone
             pipes.push_back(*new Pipe());
             pipeTimer = 0;
         }
