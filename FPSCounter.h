@@ -8,6 +8,7 @@ class FPSCounter
 public:
 
     sf::Text fpsCtr;
+
     bool showCtr;
     float smoothTimer;
     sf::Font font;

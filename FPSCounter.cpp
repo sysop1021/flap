@@ -4,11 +4,11 @@
 FPSCounter::FPSCounter()
 {
     fpsCtr.setString("FPS:");
-    fpsCtr.setFont(font);
-    fpsCtr.setFillColor(sf::Color::Green);
-    fpsCtr.setPosition(5.f, 5.f);
-
     font.loadFromFile("assets/font.ttf");
+
+    fpsCtr.setFont(font);
+    fpsCtr.setFillColor(sf::Color::Red);
+    fpsCtr.setPosition(5.f, 5.f);
 
     showCtr = false;
     smoothTimer = 0.f;

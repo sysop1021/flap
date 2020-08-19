@@ -8,13 +8,13 @@
 
 int main(void)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird5");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird6");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
     srand(time(0));
 
     sf::Texture backgroundTex;
-    backgroundTex.loadFromFile("assets/background - Copy.png");
+    backgroundTex.loadFromFile("assets/background.png");
     sf::Sprite backgroundSprite(backgroundTex);
     backgroundSprite.setScale(SCALING_FACTOR, SCALING_FACTOR);
     float bgScroll = 0.f;
@@ -34,7 +34,9 @@ int main(void)
 
     FPSCounter fpsCounter;
 
-    std::deque <Pipe> pipes;
+    std::deque <Pipe> bottomPipes;
+    std::deque <Pipe> topPipes;
+
     float pipeTimer = 0.f;
 
     sf::Clock clock;
@@ -68,20 +70,32 @@ int main(void)
 
         if (pipeTimer > 2.f)
         {
-            // TODO: MB: need to reconsider this - memory leak prone
-            pipes.push_back(*new Pipe());
+            // TODO: MB: need to reconsider this - memory leak prone?
+            bottomPipes.push_back(*new Pipe(false));
+            topPipes.push_back(*new Pipe(true));
             pipeTimer = 0;
         }
 
-        for (int i = 0; i < pipes.size(); i++)
+        for (int i = 0; i < bottomPipes.size(); i++)
         {
-            pipes[i].update(dt.asSeconds());
+            bottomPipes[i].update(dt.asSeconds());
 
         }
 
-        if (pipes.size() > 5)
+        for (int i = 0; i < topPipes.size(); i++)
         {
-            pipes.pop_front();
+            topPipes[i].update(dt.asSeconds());
+
+        }
+
+        if (bottomPipes.size() > 5)
+        {
+            bottomPipes.pop_front();
+        }
+
+        if (topPipes.size() > 5)
+        {
+            topPipes.pop_front();
         }
 
         bird.update(dt.asSeconds());
@@ -90,9 +104,14 @@ int main(void)
         window.clear();
         window.draw(backgroundSprite);
 
-        for (int i = 0; i < pipes.size(); i++)
+        for (int i = 0; i < bottomPipes.size(); i++)
         {
-            pipes[i].render(window);
+            bottomPipes[i].render(window);
+        }
+
+        for (int i = 0; i < topPipes.size(); i++)
+        {
+            topPipes[i].render(window);
         }
 
         window.draw(foregroundSprite);

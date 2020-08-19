@@ -2,12 +2,11 @@
 #define PIPE_H
 
 #include <SFML/Graphics.hpp>
-#include "constants.h"
 
 class Pipe
 {
 public:
-    Pipe();
+    Pipe(bool isTop);
     ~Pipe();
 
     void update(float dt);
@@ -19,6 +18,7 @@ public:
     float x;
     float y;
     float width;
+    float height;
 
 };
 
