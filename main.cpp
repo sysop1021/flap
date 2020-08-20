@@ -30,6 +30,8 @@ int main(void)
     float fgYPos = (WINDOW_HEIGHT - foregroundSprite.getGlobalBounds().height);
     foregroundSprite.setPosition(0, fgYPos);
 
+    Pipe::tex.loadFromFile("assets/pipe.png");
+
     Bird bird;
 
     FPSCounter fpsCounter;
@@ -76,13 +78,13 @@ int main(void)
             pipeTimer = 0;
         }
 
-        for (int i = 0; i < bottomPipes.size(); i++)
+        for (unsigned int i = 0; i < bottomPipes.size(); i++)
         {
             bottomPipes[i].update(dt.asSeconds());
 
         }
 
-        for (int i = 0; i < topPipes.size(); i++)
+        for (unsigned int i = 0; i < topPipes.size(); i++)
         {
             topPipes[i].update(dt.asSeconds());
 
@@ -104,12 +106,12 @@ int main(void)
         window.clear();
         window.draw(backgroundSprite);
 
-        for (int i = 0; i < bottomPipes.size(); i++)
+        for (unsigned int i = 0; i < bottomPipes.size(); i++)
         {
             bottomPipes[i].render(window);
         }
 
-        for (int i = 0; i < topPipes.size(); i++)
+        for (unsigned int i = 0; i < topPipes.size(); i++)
         {
             topPipes[i].render(window);
         }

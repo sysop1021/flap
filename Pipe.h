@@ -12,7 +12,7 @@ public:
     void update(float dt);
     void render(sf::RenderWindow& window);
 
-    sf::Texture tex;
+    static sf::Texture tex;
     sf::Sprite sprite;
 
     float x;

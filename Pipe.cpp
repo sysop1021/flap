@@ -1,10 +1,10 @@
 #include "Pipe.h"
 #include "constants.h"
 
+sf::Texture Pipe::tex;
+
 Pipe::Pipe(bool isTop)
 {
-    // TODO: MB: make this static so we only ever have one copy in mem
-    tex.loadFromFile("assets/pipe.png");
     sprite.setTexture(tex);
     sprite.setScale(SCALING_FACTOR, SCALING_FACTOR);
     sprite.setOrigin(0.f, 0.f);

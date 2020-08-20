@@ -25,7 +25,7 @@ void Bird::render(sf::RenderWindow& window)
 }
 
 void Bird::update(float dt)
-{
+{/*
     yVel += GRAVITY * dt;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isReleased)
@@ -41,4 +41,5 @@ void Bird::update(float dt)
 
     yPos += yVel;
     sprite.setPosition(xPos, yPos);
+    */
 }
