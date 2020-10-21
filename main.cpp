@@ -1,3 +1,10 @@
+/*
+    TODO: BUG: when moving or resizing the window, it screws with
+    the position of new spawning pipes.
+
+    TOOD: BUG: my deque usage may be leaking memory...??
+*/
+
 #include <SFML/Graphics.hpp>
 #include <deque>
 
@@ -36,8 +43,8 @@ int main(void)
 
     FPSCounter fpsCounter;
 
-    std::deque <Pipe> bottomPipes;
-    std::deque <Pipe> topPipes;
+    // TODO: I hate this - I really should have my own data structure
+    std::deque <Pipe> pipes;
 
     float pipeTimer = 0.f;
 
@@ -72,32 +79,19 @@ int main(void)
 
         if (pipeTimer > 2.f)
         {
-            // TODO: MB: need to reconsider this - memory leak prone?
-            bottomPipes.push_back(*new Pipe(false));
-            topPipes.push_back(*new Pipe(true));
+            pipes.push_back(*new Pipe());
             pipeTimer = 0;
         }
 
-        for (unsigned int i = 0; i < bottomPipes.size(); i++)
+        for (unsigned int i = 0; i < pipes.size(); i++)
         {
-            bottomPipes[i].update(dt.asSeconds());
+            pipes[i].update(dt.asSeconds());
 
         }
 
-        for (unsigned int i = 0; i < topPipes.size(); i++)
+        if (pipes.size() > 5)
         {
-            topPipes[i].update(dt.asSeconds());
-
-        }
-
-        if (bottomPipes.size() > 5)
-        {
-            bottomPipes.pop_front();
-        }
-
-        if (topPipes.size() > 5)
-        {
-            topPipes.pop_front();
+            pipes.pop_front();
         }
 
         bird.update(dt.asSeconds());
@@ -106,14 +100,9 @@ int main(void)
         window.clear();
         window.draw(backgroundSprite);
 
-        for (unsigned int i = 0; i < bottomPipes.size(); i++)
+        for (unsigned int i = 0; i < pipes.size(); i++)
         {
-            bottomPipes[i].render(window);
-        }
-
-        for (unsigned int i = 0; i < topPipes.size(); i++)
-        {
-            topPipes[i].render(window);
+            pipes[i].render(window);
         }
 
         window.draw(foregroundSprite);

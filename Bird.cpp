@@ -25,7 +25,8 @@ void Bird::render(sf::RenderWindow& window)
 }
 
 void Bird::update(float dt)
-{/*
+{
+    /*
     yVel += GRAVITY * dt;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isReleased)
