@@ -68,9 +68,6 @@ int main(void)
             }
         }
 
-        /* Handle Input */
-        // punting to update
-
         /* Update */
         backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
         foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
@@ -87,11 +84,14 @@ int main(void)
         {
             pipes[i].update(dt.asSeconds());
 
-        }
+            // remove old pipes as they pass to the left of the window
 
-        if (pipes.size() > 5)
-        {
-            pipes.pop_front();
+            if (pipes[i].bottomX + pipes[i].bottomWidth < 0)
+            {
+                 pipes.pop_front();
+            }
+
+
         }
 
         bird.update(dt.asSeconds());

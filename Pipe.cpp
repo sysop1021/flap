@@ -6,14 +6,16 @@ sf::Texture Pipe::tex;
 
 Pipe::Pipe()
 {
+    xOffset = rand() % 200 + 50; // TODO: tune this value for proc gen of pipes
+
     topSprite.setTexture(tex);
     topSprite.setScale(SCALING_FACTOR, SCALING_FACTOR);
     topSprite.setOrigin(0.f, 0.f);
     topWidth = topSprite.getGlobalBounds().width;
     topHeight = topSprite.getGlobalBounds().height;
     topSprite.setRotation(180);
-    topX = WINDOW_WIDTH + topWidth;
-    topY = (WINDOW_HEIGHT / 4);
+    topX = WINDOW_WIDTH + topWidth + xOffset;
+    topY = (WINDOW_HEIGHT / 4) - rand() % 50;                             // TODO: minus some rand
     topSprite.setPosition(topX, topY);
 
     bottomSprite.setTexture(tex);
@@ -21,8 +23,8 @@ Pipe::Pipe()
     bottomSprite.setOrigin(0.f, 0.f);
     bottomWidth = bottomSprite.getGlobalBounds().width;
     bottomHeight = bottomSprite.getGlobalBounds().height;
-    bottomX = WINDOW_WIDTH;
-    bottomY = 3 * (WINDOW_HEIGHT / 4);
+    bottomX = WINDOW_WIDTH + xOffset;
+    bottomY = 3 * (WINDOW_HEIGHT / 4) + rand() % 50;                      // TODO: plus some rand
     bottomSprite.setPosition(bottomX, bottomY);
 }
 

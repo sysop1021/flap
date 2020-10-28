@@ -26,6 +26,8 @@ public:
     float bottomWidth;
     float bottomHeight;
 
+    float xOffset;
+
 };
 
 #endif
