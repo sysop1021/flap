@@ -19,14 +19,41 @@ Bird::~Bird()
 
 }
 
-void Bird::render(sf::RenderWindow& window)
+void Bird::render(sf::RenderWindow &window)
 {
     window.draw(sprite);
 }
 
+bool Bird::checkCollision(Pipe& pipe)
+{
+    // TODO: don't really like this - i need to factor out Pipe/pipes to a PipePair that has 2 Pipes.
+
+   if ( !(xPos > (pipe.topX + pipe.topSprite.getGlobalBounds().width)) &&
+        !((xPos + sprite.getGlobalBounds().width) < pipe.topX) &&
+        !(yPos > (pipe.topY + pipe.topSprite.getGlobalBounds().height)) &&
+        !((yPos + sprite.getGlobalBounds().height) < pipe.topY) )
+    {
+        return true;
+    }
+
+    else if ( !(xPos > (pipe.bottomX + pipe.bottomSprite.getGlobalBounds().width)) &&
+              !((xPos + sprite.getGlobalBounds().width) < pipe.bottomX) &&
+              !(yPos > (pipe.bottomY + pipe.bottomSprite.getGlobalBounds().height)) &&
+              !((yPos + sprite.getGlobalBounds().height) < pipe.bottomY) )
+    {
+        return true;
+    }
+
+    else
+    {
+        return false;
+    }
+}
+
 void Bird::update(float dt)
 {
-    /*
+    // Commented out just for pipe debugging
+
     yVel += GRAVITY * dt;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isReleased)
@@ -42,5 +69,5 @@ void Bird::update(float dt)
 
     yPos += yVel;
     sprite.setPosition(xPos, yPos);
-    */
+
 }

@@ -2,7 +2,12 @@
     TODO: BUG: when moving or resizing the window, it screws with
     the position of new spawning pipes.
 
-    TOOD: BUG: my deque usage may be leaking memory...??
+    TODO: pipes spawn every 2 seconds currently - make sure that random pipe spawning doesn't happen at on-screen coords
+    (pipes may "pop-in" with current implementation)
+
+    TODO: Bug - pipes may occasionally spawn overlapping each other (along x axis)
+
+    TODO: replace deque usage with my own data structure
 */
 
 #include <SFML/Graphics.hpp>
@@ -43,18 +48,20 @@ int main(void)
 
     FPSCounter fpsCounter;
 
-    // TODO: I hate this - I really should have my own data structure
-    std::deque <Pipe> pipes;
+    std::deque<Pipe> pipes;
 
     float pipeTimer = 0.f;
 
     sf::Clock clock;
+
+    bool isScrolling = true;
 
     /* Game Loop */
     while (window.isOpen())
     {
         sf::Time dt = clock.restart();
         sf::Event event;
+
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
@@ -69,32 +76,42 @@ int main(void)
         }
 
         /* Update */
-        backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
-        foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
 
-        pipeTimer += dt.asSeconds();
-
-        if (pipeTimer > 2.f)
+        if (isScrolling)
         {
-            pipes.push_back(*new Pipe());
-            pipeTimer = 0;
-        }
+            backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
+            foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
 
-        for (unsigned int i = 0; i < pipes.size(); i++)
-        {
-            pipes[i].update(dt.asSeconds());
+            pipeTimer += dt.asSeconds();
 
-            // remove old pipes as they pass to the left of the window
-
-            if (pipes[i].bottomX + pipes[i].bottomWidth < 0)
+            // Pipes are spawning based on time, rather than distance - I may change this
+            if (pipeTimer > 2.f)
             {
-                 pipes.pop_front();
+                pipes.push_back(*new Pipe());
+                pipeTimer = 0;
             }
 
+            for (unsigned int i = 0; i < pipes.size(); i++)
+            {
+                pipes[i].update(dt.asSeconds());
 
+                // remove old pipes as they pass to the left of the window
+                if (pipes[i].bottomX + pipes[i].bottomWidth < 0)
+                {
+                     pipes.pop_front();
+                }
+            }
+
+            bird.update(dt.asSeconds());
+
+            for (unsigned int i = 0; i < pipes.size(); i++)
+            {
+                if (bird.checkCollision(pipes[i]))
+                {
+                    isScrolling = false;
+                }
+            }
         }
-
-        bird.update(dt.asSeconds());
 
         /* Draw */
         window.clear();

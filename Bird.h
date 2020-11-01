@@ -2,6 +2,7 @@
 #define BIRD_H
 
 #include <SFML/Graphics.hpp>
+#include "Pipe.h"
 
 class Bird
 {
@@ -16,6 +17,7 @@ public:
     sf::Sprite sprite;
     float xPos, yPos, yVel, width, height;
     bool isReleased;
+    bool checkCollision(Pipe& pipe);
 
 private:
 
