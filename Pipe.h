@@ -12,7 +12,8 @@ public:
     void update(float dt);
     void render(sf::RenderWindow& window);
 
-    static sf::Texture tex;
+    static sf::Texture bottomTex;
+    static sf::Texture topTex;
     sf::Sprite topSprite;
     sf::Sprite bottomSprite;
 

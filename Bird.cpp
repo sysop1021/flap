@@ -28,18 +28,18 @@ bool Bird::checkCollision(Pipe& pipe)
 {
     // TODO: don't really like this - i need to factor out Pipe/pipes to a PipePair that has 2 Pipes.
 
-   if ( !(xPos > (pipe.topX + pipe.topSprite.getGlobalBounds().width)) &&
-        !((xPos + sprite.getGlobalBounds().width) < pipe.topX) &&
-        !(yPos > (pipe.topY + pipe.topSprite.getGlobalBounds().height)) &&
-        !((yPos + sprite.getGlobalBounds().height) < pipe.topY) )
+    if ( !(xPos + 4 > (pipe.topX + pipe.topWidth)) &&
+         !((xPos + sprite.getGlobalBounds().width - 4) < pipe.topX) &&
+         !(yPos + 3 > (pipe.topY + pipe.topHeight)) &&
+         !((yPos + sprite.getGlobalBounds().height - 3) < pipe.topY) )
     {
         return true;
     }
 
-    else if ( !(xPos > (pipe.bottomX + pipe.bottomSprite.getGlobalBounds().width)) &&
-              !((xPos + sprite.getGlobalBounds().width) < pipe.bottomX) &&
-              !(yPos > (pipe.bottomY + pipe.bottomSprite.getGlobalBounds().height)) &&
-              !((yPos + sprite.getGlobalBounds().height) < pipe.bottomY) )
+    else if ( !(xPos + 4 > (pipe.bottomX + pipe.bottomWidth)) &&
+              !((xPos + sprite.getGlobalBounds().width - 4) < pipe.bottomX) &&
+              !(yPos + 3 > (pipe.bottomY + pipe.bottomHeight)) &&
+              !((yPos + sprite.getGlobalBounds().height - 3) < pipe.bottomY) )
     {
         return true;
     }
@@ -53,7 +53,7 @@ bool Bird::checkCollision(Pipe& pipe)
 void Bird::update(float dt)
 {
     // Commented out just for pipe debugging
-
+    /*
     yVel += GRAVITY * dt;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isReleased)
@@ -69,5 +69,6 @@ void Bird::update(float dt)
 
     yPos += yVel;
     sprite.setPosition(xPos, yPos);
+    */
 
 }

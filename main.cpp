@@ -20,7 +20,7 @@
 
 int main(void)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird6");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird7");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
     srand(time(0));
@@ -42,7 +42,8 @@ int main(void)
     float fgYPos = (WINDOW_HEIGHT - foregroundSprite.getGlobalBounds().height);
     foregroundSprite.setPosition(0, fgYPos);
 
-    Pipe::tex.loadFromFile("assets/pipe.png");
+    Pipe::topTex.loadFromFile("assets/topPipe.png");
+    Pipe::bottomTex.loadFromFile("assets/bottomPipe.png");
 
     Bird bird;
 
