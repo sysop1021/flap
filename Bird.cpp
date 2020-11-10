@@ -1,5 +1,6 @@
 #include "Bird.h"
 #include "constants.h"
+//#define GRAVITY_ON
 
 Bird::Bird()
 {
@@ -52,8 +53,7 @@ bool Bird::checkCollision(Pipe& pipe)
 
 void Bird::update(float dt)
 {
-    // Commented out just for pipe debugging
-    /*
+#ifdef GRAVITY_ON
     yVel += GRAVITY * dt;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isReleased)
@@ -69,6 +69,6 @@ void Bird::update(float dt)
 
     yPos += yVel;
     sprite.setPosition(xPos, yPos);
-    */
+#endif
 
 }

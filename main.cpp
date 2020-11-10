@@ -86,7 +86,7 @@ int main(void)
             pipeTimer += dt.asSeconds();
 
             // Pipes are spawning based on time, rather than distance - I may change this
-            if (pipeTimer > 2.f)
+            if (pipeTimer > 2.5f)
             {
                 pipes.push_back(*new Pipe());
                 pipeTimer = 0;
@@ -96,7 +96,6 @@ int main(void)
             {
                 pipes[i].update(dt.asSeconds());
 
-                // remove old pipes as they pass to the left of the window
                 if (pipes[i].bottomX + pipes[i].bottomWidth < 0)
                 {
                      pipes.pop_front();

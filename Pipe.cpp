@@ -16,7 +16,7 @@ Pipe::Pipe()
     topHeight = topSprite.getGlobalBounds().height;
     topSprite.setOrigin(0, 0);
     topX = WINDOW_WIDTH + xOffset;
-    topY = (WINDOW_HEIGHT / 5) - topHeight + rand() % 200;
+    topY = (WINDOW_HEIGHT / 5) - topHeight + rand() % 150;
     topSprite.setPosition(topX, topY);
 
     bottomSprite.setTexture(bottomTex);
@@ -25,7 +25,7 @@ Pipe::Pipe()
     bottomWidth = bottomSprite.getGlobalBounds().width;
     bottomHeight = bottomSprite.getGlobalBounds().height;
     bottomX = WINDOW_WIDTH + xOffset;
-    bottomY = 4 * (WINDOW_HEIGHT / 5) - rand() % 200;
+    bottomY = 4 * (WINDOW_HEIGHT / 5) - rand() % 150;
     bottomSprite.setPosition(bottomX, bottomY);
 }
 
