@@ -9,12 +9,15 @@ Pipe::Pipe()
 {
     xOffset = 0; //rand() % 200 + 50; // TODO: tune this value for proc gen of pipes
 
+    isScored = false;
+
     topSprite.setTexture(topTex);
     topSprite.setScale(SCALING_FACTOR, SCALING_FACTOR);
     topWidth = topSprite.getGlobalBounds().width;
     topHeight = topSprite.getGlobalBounds().height;
     topSprite.setOrigin(0, 0);
     topX = WINDOW_WIDTH + xOffset;
+    topY = (WINDOW_HEIGHT / 5) - topHeight;
     topY = (WINDOW_HEIGHT / 5) - topHeight + rand() % 150;
     topSprite.setPosition(topX, topY);
 

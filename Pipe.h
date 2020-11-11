@@ -29,6 +29,8 @@ public:
 
     float xOffset;
 
+    bool isScored;
+
 };
 
 #endif

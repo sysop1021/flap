@@ -6,6 +6,8 @@
     (pipes may "pop-in" with current implementation)
 
     TODO: replace deque usage with my own data structure
+
+    TODO: Implement ground collision
 */
 
 #include <SFML/Graphics.hpp>
@@ -18,7 +20,7 @@
 
 int main(void)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird8");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird9");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
     srand(time(0));
@@ -54,13 +56,41 @@ int main(void)
     titleCard.setPosition(WINDOW_WIDTH / 2 - titleCard.getGlobalBounds().width / 2, WINDOW_HEIGHT / 2 - titleCard.getGlobalBounds().height + 10);
 
     sf::Text enterPrompt;
-    enterPrompt.setString("Press Enter");
+    enterPrompt.setString("Press Enter to play");
     enterPrompt.setFont(titleFont);
     enterPrompt.setFillColor(sf::Color::White);
     //enterPrompt.setCharacterSize(/*uint - 30 is default */);
     enterPrompt.setPosition(WINDOW_WIDTH / 2 - enterPrompt.getGlobalBounds().width / 2, WINDOW_HEIGHT / 2 + enterPrompt.getGlobalBounds().height + 10);
 
+    sf::Text lostText;
+    lostText.setString("Bummer, dude.");
+    lostText.setFont(titleFont);
+    lostText.setFillColor(sf::Color::White);
+    lostText.setCharacterSize(70);
+    lostText.setPosition(WINDOW_WIDTH / 2 - lostText.getGlobalBounds().width / 2, WINDOW_HEIGHT / 2 - lostText.getGlobalBounds().height - 40);
+
+    sf::Text scoreText;
+    scoreText.setString("Score: 0");
+    scoreText.setFont(titleFont);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setPosition(10, 10);
+
+    sf::Text scoreCard;
+    scoreCard.setString("Score: 0");
+    scoreCard.setFont(titleFont);
+    scoreCard.setFillColor(sf::Color::White);
+    scoreCard.setPosition(WINDOW_WIDTH / 2 - scoreCard.getGlobalBounds().width / 2, WINDOW_HEIGHT / 2 - scoreCard.getGlobalBounds().height / 2);
+
+    sf::Text againPrompt;
+    againPrompt.setString("Press Enter to play again");
+    againPrompt.setFont(titleFont);
+    againPrompt.setFillColor(sf::Color::White);
+    //againPrompt.setCharacterSize(/*uint - 30 is default */);
+    againPrompt.setPosition(WINDOW_WIDTH / 2 - againPrompt.getGlobalBounds().width / 2, WINDOW_HEIGHT / 2 + againPrompt.getGlobalBounds().height + 40);
+
     Bird bird;
+
+    unsigned int score = 0;
 
     FPSCounter fpsCounter;
 
@@ -124,7 +154,14 @@ int main(void)
                 {
                     if (bird.checkCollision(pipes[i]))
                     {
-                        state = TITLE;
+                        state = SCORE;
+                    }
+
+                    if (bird.xPos + bird.width >= pipes[i].bottomX + pipes[i].bottomWidth && !pipes[i].isScored)
+                    {
+                        pipes[i].isScored = true;
+                        score++;
+                        scoreText.setString("Score: " + std::to_string(score));
                     }
                 }
 
@@ -135,7 +172,7 @@ int main(void)
                 {
                     pipes[i].render(window);
                 }
-
+                window.draw(scoreText);
                 window.draw(foregroundSprite);
                 bird.render(window);
             }
@@ -143,7 +180,7 @@ int main(void)
 
             case TITLE:
             {
-                pipes.clear();
+
                 backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
                 foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
 
@@ -157,6 +194,29 @@ int main(void)
                 {
                     bird.resetPos();
                     state = PLAY;
+                }
+            }
+            break;
+
+            case SCORE:
+            {
+                pipes.clear();
+                backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
+                foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
+
+                window.draw(backgroundSprite);
+                window.draw(lostText);
+                scoreCard.setString("Score: " + std::to_string(score));
+                window.draw(scoreCard);
+                window.draw(againPrompt);
+                window.draw(foregroundSprite);
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+                {
+                    bird.resetPos();
+                    state = PLAY;
+                    score = 0;
+                    scoreText.setString("Score: " + std::to_string(score));
                 }
             }
             break;
