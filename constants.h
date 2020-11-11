@@ -10,4 +10,6 @@ const int BACKGROUND_LOOP_POINT = 1032;
 const float GRAVITY = 50.f;
 const float JUMP_FORCE = 12.f;
 
+enum State {TITLE, COUNTDOWN, PLAY, SCORE};
+
 #endif

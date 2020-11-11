@@ -1,6 +1,6 @@
 #include "Bird.h"
 #include "constants.h"
-//#define GRAVITY_ON
+#define GRAVITY_ON
 
 Bird::Bird()
 {
@@ -8,8 +8,7 @@ Bird::Bird()
     sprite.setTexture(tex);
     sprite.setScale(SCALING_FACTOR, SCALING_FACTOR);
     sprite.setOrigin(0, 0);
-    xPos = WINDOW_WIDTH / 2 - sprite.getGlobalBounds().width / 2;
-    yPos = WINDOW_HEIGHT / 2 - sprite.getGlobalBounds().height / 2;
+    resetPos();
     sprite.setPosition(xPos, yPos);
     yVel = 0.f;
     isReleased = true;
@@ -18,6 +17,12 @@ Bird::Bird()
 Bird::~Bird()
 {
 
+}
+
+void Bird::resetPos()
+{
+    xPos = WINDOW_WIDTH / 2 - sprite.getGlobalBounds().width / 2;
+    yPos = WINDOW_HEIGHT / 2 - sprite.getGlobalBounds().height / 2;
 }
 
 void Bird::render(sf::RenderWindow &window)

@@ -5,8 +5,6 @@
     TODO: pipes spawn every 2 seconds currently - make sure that random pipe spawning doesn't happen at on-screen coords
     (pipes may "pop-in" with current implementation)
 
-    TODO: Bug - pipes may occasionally spawn overlapping each other (along x axis)
-
     TODO: replace deque usage with my own data structure
 */
 
@@ -20,7 +18,7 @@
 
 int main(void)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird7");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird8");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
     srand(time(0));
@@ -45,6 +43,23 @@ int main(void)
     Pipe::topTex.loadFromFile("assets/topPipe.png");
     Pipe::bottomTex.loadFromFile("assets/bottomPipe.png");
 
+    sf::Font titleFont;
+    titleFont.loadFromFile("assets/flappy.ttf");
+
+    sf::Text titleCard;
+    titleCard.setString("Floppy Bird");
+    titleCard.setFont(titleFont);
+    titleCard.setFillColor(sf::Color::White);
+    titleCard.setCharacterSize(70);
+    titleCard.setPosition(WINDOW_WIDTH / 2 - titleCard.getGlobalBounds().width / 2, WINDOW_HEIGHT / 2 - titleCard.getGlobalBounds().height + 10);
+
+    sf::Text enterPrompt;
+    enterPrompt.setString("Press Enter");
+    enterPrompt.setFont(titleFont);
+    enterPrompt.setFillColor(sf::Color::White);
+    //enterPrompt.setCharacterSize(/*uint - 30 is default */);
+    enterPrompt.setPosition(WINDOW_WIDTH / 2 - enterPrompt.getGlobalBounds().width / 2, WINDOW_HEIGHT / 2 + enterPrompt.getGlobalBounds().height + 10);
+
     Bird bird;
 
     FPSCounter fpsCounter;
@@ -55,7 +70,7 @@ int main(void)
 
     sf::Clock clock;
 
-    bool isScrolling = true;
+    State state = TITLE;
 
     /* Game Loop */
     while (window.isOpen())
@@ -77,53 +92,84 @@ int main(void)
         }
 
         /* Update */
-
-        if (isScrolling)
+        switch (state)
         {
-            backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
-            foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
-
-            pipeTimer += dt.asSeconds();
-
-            // Pipes are spawning based on time, rather than distance - I may change this
-            if (pipeTimer > 2.5f)
+            case PLAY:
             {
-                pipes.push_back(*new Pipe());
-                pipeTimer = 0;
-            }
+                backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
+                foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
 
-            for (unsigned int i = 0; i < pipes.size(); i++)
-            {
-                pipes[i].update(dt.asSeconds());
+                pipeTimer += dt.asSeconds();
 
-                if (pipes[i].bottomX + pipes[i].bottomWidth < 0)
+                // Pipes are spawning based on time, rather than distance - I may change this
+                if (pipeTimer > 2.5f)
                 {
-                     pipes.pop_front();
+                    pipes.push_back(*new Pipe());
+                    pipeTimer = 0;
+                }
+
+                for (unsigned int i = 0; i < pipes.size(); i++)
+                {
+                    pipes[i].update(dt.asSeconds());
+
+                    if (pipes[i].bottomX + pipes[i].bottomWidth < 0)
+                    {
+                         pipes.pop_front();
+                    }
+                }
+
+                bird.update(dt.asSeconds());
+
+                for (unsigned int i = 0; i < pipes.size(); i++)
+                {
+                    if (bird.checkCollision(pipes[i]))
+                    {
+                        state = TITLE;
+                    }
+                }
+
+                window.clear();
+                window.draw(backgroundSprite);
+
+                for (unsigned int i = 0; i < pipes.size(); i++)
+                {
+                    pipes[i].render(window);
+                }
+
+                window.draw(foregroundSprite);
+                bird.render(window);
+            }
+            break;
+
+            case TITLE:
+            {
+                pipes.clear();
+                backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
+                foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
+
+                window.draw(backgroundSprite);
+                window.draw(titleCard);
+                window.draw(enterPrompt);
+                window.draw(foregroundSprite);
+
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+                {
+                    bird.resetPos();
+                    state = PLAY;
                 }
             }
+            break;
 
-            bird.update(dt.asSeconds());
-
-            for (unsigned int i = 0; i < pipes.size(); i++)
+        default:
             {
-                if (bird.checkCollision(pipes[i]))
-                {
-                    isScrolling = false;
-                }
+
             }
+            break;
         }
 
         /* Draw */
-        window.clear();
-        window.draw(backgroundSprite);
 
-        for (unsigned int i = 0; i < pipes.size(); i++)
-        {
-            pipes[i].render(window);
-        }
-
-        window.draw(foregroundSprite);
-        bird.render(window);
         fpsCounter.render(dt, window);
         window.display();
     }

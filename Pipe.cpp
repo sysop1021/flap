@@ -9,7 +9,6 @@ Pipe::Pipe()
 {
     xOffset = 0; //rand() % 200 + 50; // TODO: tune this value for proc gen of pipes
 
-
     topSprite.setTexture(topTex);
     topSprite.setScale(SCALING_FACTOR, SCALING_FACTOR);
     topWidth = topSprite.getGlobalBounds().width;

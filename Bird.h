@@ -12,6 +12,7 @@ public:
 
     void render(sf::RenderWindow& window);
     void update(float dt);
+    void resetPos();
 
     sf::Texture tex;
     sf::Sprite sprite;
