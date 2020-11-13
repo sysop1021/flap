@@ -20,7 +20,7 @@
 
 int main(void)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird9");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird10");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
     srand(time(0));
@@ -88,6 +88,13 @@ int main(void)
     //againPrompt.setCharacterSize(/*uint - 30 is default */);
     againPrompt.setPosition(WINDOW_WIDTH / 2 - againPrompt.getGlobalBounds().width / 2, WINDOW_HEIGHT / 2 + againPrompt.getGlobalBounds().height + 40);
 
+    sf::Text countdown;
+    countdown.setString("3");
+    countdown.setFont(titleFont);
+    countdown.setFillColor(sf::Color::White);
+    countdown.setCharacterSize(100);
+    countdown.setPosition(WINDOW_WIDTH / 2 - countdown.getGlobalBounds().width / 2, WINDOW_HEIGHT / 2 - countdown.getGlobalBounds().height);
+
     Bird bird;
 
     unsigned int score = 0;
@@ -97,6 +104,7 @@ int main(void)
     std::deque<Pipe> pipes;
 
     float pipeTimer = 0.f;
+    float cdTimer = 0.f;
 
     sf::Clock clock;
 
@@ -135,7 +143,7 @@ int main(void)
                 if (pipeTimer > 2.5f)
                 {
                     pipes.push_back(*new Pipe());
-                    pipeTimer = 0;
+                    pipeTimer = 0.f;
                 }
 
                 for (unsigned int i = 0; i < pipes.size(); i++)
@@ -198,7 +206,7 @@ int main(void)
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
                 {
                     bird.resetPos();
-                    state = PLAY;
+                    state = COUNTDOWN;
                 }
             }
             break;
@@ -219,9 +227,40 @@ int main(void)
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
                 {
                     bird.resetPos();
-                    state = PLAY;
+                    state = COUNTDOWN;
                     score = 0;
                     scoreText.setString("Score: " + std::to_string(score));
+                }
+            }
+            break;
+
+            case COUNTDOWN:
+            {
+                // countdown 3...2...1
+                backgroundSprite.setPosition((int)(bgScroll -= BACKGROUND_SCROLL_SPEED * dt.asSeconds()) % BACKGROUND_LOOP_POINT, 0);
+                foregroundSprite.setPosition((int)(fgScroll -= FOREGROUND_SCROLL_SPEED * dt.asSeconds()) % WINDOW_WIDTH, fgYPos);
+
+                window.draw(backgroundSprite);
+                window.draw(countdown);
+                window.draw(foregroundSprite);
+
+                cdTimer += dt.asMilliseconds();
+
+                if (cdTimer >= 1000.f)
+                {
+                    countdown.setString("2");
+                }
+
+                if (cdTimer >= 2000.f)
+                {
+                    countdown.setString("1");
+                }
+
+                if (cdTimer >= 3000.f)
+                {
+                    cdTimer = 0.f;
+                    state = PLAY;
+                    countdown.setString("3");
                 }
             }
             break;
