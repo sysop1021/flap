@@ -150,6 +150,11 @@ int main(void)
 
                 bird.update(dt.asSeconds());
 
+                if (bird.yPos + bird.height >= WINDOW_HEIGHT)
+                {
+                    state = SCORE;
+                }
+
                 for (unsigned int i = 0; i < pipes.size(); i++)
                 {
                     if (bird.checkCollision(pipes[i]))
@@ -221,7 +226,7 @@ int main(void)
             }
             break;
 
-        default:
+            default:
             {
 
             }

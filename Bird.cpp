@@ -1,6 +1,6 @@
 #include "Bird.h"
 #include "constants.h"
-//#define GRAVITY_ON
+#define GRAVITY_ON
 
 Bird::Bird()
 {
@@ -8,6 +8,8 @@ Bird::Bird()
     sprite.setTexture(tex);
     sprite.setScale(SCALING_FACTOR, SCALING_FACTOR);
     sprite.setOrigin(0, 0);
+    width = sprite.getGlobalBounds().width;
+    height = sprite.getGlobalBounds().height;
     resetPos();
     isReleased = true;
 }
@@ -20,8 +22,8 @@ Bird::~Bird()
 void Bird::resetPos()
 {
     yVel = 0.f;
-    xPos = WINDOW_WIDTH / 2 - sprite.getGlobalBounds().width / 2;
-    yPos = WINDOW_HEIGHT / 2 - sprite.getGlobalBounds().height / 2;
+    xPos = WINDOW_WIDTH / 2 - width / 2;
+    yPos = WINDOW_HEIGHT / 2 - height / 2;
     sprite.setPosition(xPos, yPos);
 }
 
@@ -35,17 +37,17 @@ bool Bird::checkCollision(Pipe& pipe)
     // TODO: don't really like this - i need to factor out Pipe/pipes to a PipePair that has 2 Pipes.
 
     if ( !(xPos + 4 > (pipe.topX + pipe.topWidth)) &&
-         !((xPos + sprite.getGlobalBounds().width - 4) < pipe.topX) &&
+         !((xPos + width - 4) < pipe.topX) &&
          !(yPos + 3 > (pipe.topY + pipe.topHeight)) &&
-         !((yPos + sprite.getGlobalBounds().height - 3) < pipe.topY) )
+         !((yPos + height - 3) < pipe.topY) )
     {
         return true;
     }
 
     else if ( !(xPos + 4 > (pipe.bottomX + pipe.bottomWidth)) &&
-              !((xPos + sprite.getGlobalBounds().width - 4) < pipe.bottomX) &&
+              !((xPos + width - 4) < pipe.bottomX) &&
               !(yPos + 3 > (pipe.bottomY + pipe.bottomHeight)) &&
-              !((yPos + sprite.getGlobalBounds().height - 3) < pipe.bottomY) )
+              !((yPos + height - 3) < pipe.bottomY) )
     {
         return true;
     }
@@ -75,5 +77,4 @@ void Bird::update(float dt)
     yPos += yVel;
     sprite.setPosition(xPos, yPos);
 #endif
-
 }
