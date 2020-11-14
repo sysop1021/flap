@@ -75,14 +75,14 @@ void Bird::update(float dt)
 #ifdef GRAVITY_ON
     yVel += GRAVITY * dt;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isReleased)
+    if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isReleased) || (sf::Mouse::isButtonPressed(sf::Mouse::Left)) && isReleased)
     {
         yVel = -JUMP_FORCE;
         isReleased = false;
         jump.play();
     }
 
-    if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)))
+    if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && !(sf::Mouse::isButtonPressed(sf::Mouse::Left)))
     {
         isReleased = true;
     }

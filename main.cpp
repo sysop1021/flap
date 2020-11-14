@@ -1,7 +1,4 @@
 /*
-    TODO: bird12 - mouse
-	-mouse click instead of space to jump - trivial
-
     TODO: BUG: when the left-most pipe disappears off-screen and pops off the deque, the next lef-most
     pipe shifts to the right by like 1 pixel (???)
 
@@ -12,6 +9,8 @@
     (pipes may "pop-in" with current implementation)
 
     TODO: replace deque with my own data structure
+
+    TODO: bg Music - SFML does NOT support *.mp3 - must use *.ogg
 */
 
 #include <SFML/Graphics.hpp>
@@ -25,7 +24,7 @@
 
 int main(void)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird11");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird12");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
     srand(time(0));
