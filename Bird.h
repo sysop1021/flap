@@ -2,6 +2,7 @@
 #define BIRD_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Pipe.h"
 
 class Bird
@@ -19,6 +20,15 @@ public:
     float xPos, yPos, yVel, width, height;
     bool isReleased;
     bool checkCollision(Pipe& pipe);
+
+    sf::SoundBuffer jumpBuffer;
+    sf::SoundBuffer hurtBuffer;
+    sf::SoundBuffer splodeBuffer;
+
+    sf::Sound jump;
+    sf::Sound hurt;
+    sf::Sound splode;
+
 
 private:
 

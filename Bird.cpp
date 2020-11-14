@@ -12,6 +12,14 @@ Bird::Bird()
     height = sprite.getGlobalBounds().height;
     resetPos();
     isReleased = true;
+
+    jumpBuffer.loadFromFile("assets/jump.wav");
+    hurtBuffer.loadFromFile("assets/hurt.wav");
+    splodeBuffer.loadFromFile("assets/explosion.wav");
+
+    jump.setBuffer(jumpBuffer);
+    hurt.setBuffer(hurtBuffer);
+    splode.setBuffer(splodeBuffer);
 }
 
 Bird::~Bird()
@@ -41,6 +49,8 @@ bool Bird::checkCollision(Pipe& pipe)
          !(yPos + 3 > (pipe.topY + pipe.topHeight)) &&
          !((yPos + height - 3) < pipe.topY) )
     {
+        hurt.play();
+        splode.play();
         return true;
     }
 
@@ -49,6 +59,8 @@ bool Bird::checkCollision(Pipe& pipe)
               !(yPos + 3 > (pipe.bottomY + pipe.bottomHeight)) &&
               !((yPos + height - 3) < pipe.bottomY) )
     {
+        hurt.play();
+        splode.play();
         return true;
     }
 
@@ -67,6 +79,7 @@ void Bird::update(float dt)
     {
         yVel = -JUMP_FORCE;
         isReleased = false;
+        jump.play();
     }
 
     if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)))

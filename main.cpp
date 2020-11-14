@@ -1,16 +1,21 @@
 /*
+    TODO: bird12 - mouse
+	-mouse click instead of space to jump - trivial
+
+    TODO: BUG: when the left-most pipe disappears off-screen and pops off the deque, the next lef-most
+    pipe shifts to the right by like 1 pixel (???)
+
     TODO: BUG: when moving or resizing the window, it screws with
     the position of new spawning pipes.
 
     TODO: pipes spawn every 2 seconds currently - make sure that random pipe spawning doesn't happen at on-screen coords
     (pipes may "pop-in" with current implementation)
 
-    TODO: replace deque usage with my own data structure
-
-    TODO: Implement ground collision
+    TODO: replace deque with my own data structure
 */
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <deque>
 
 #include "constants.h"
@@ -20,7 +25,7 @@
 
 int main(void)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird10");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "bird11");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
     srand(time(0));
@@ -92,8 +97,13 @@ int main(void)
     countdown.setString("3");
     countdown.setFont(titleFont);
     countdown.setFillColor(sf::Color::White);
-    countdown.setCharacterSize(100);
+    countdown.setCharacterSize(200);
     countdown.setPosition(WINDOW_WIDTH / 2 - countdown.getGlobalBounds().width / 2, WINDOW_HEIGHT / 2 - countdown.getGlobalBounds().height);
+
+    sf::SoundBuffer scoreBuffer;
+    scoreBuffer.loadFromFile("assets/score.wav");
+    sf::Sound scoreSound;
+    scoreSound.setBuffer(scoreBuffer);
 
     Bird bird;
 
@@ -175,6 +185,7 @@ int main(void)
                         pipes[i].isScored = true;
                         score++;
                         scoreText.setString("Score: " + std::to_string(score));
+                        scoreSound.play();
                     }
                 }
 
